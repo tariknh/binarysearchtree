@@ -10,7 +10,7 @@ class Tree{
         this.root = buildTree(array)
     }
     insert(data, node){
-        if(data == node.data){
+        if(data == node?.data){
             return console.log(data + " already exists!")
         }
         if(node === null){
@@ -31,52 +31,163 @@ class Tree{
         return node
     }
     find(data,node){
-        if(data == node.data){
-            return console.log(node.data + " was found!")
-        }
-        if(data < node.data){
-            if(node.left == undefined){
-                if(node.right == undefined){
-                    return console.log("Not found")
-                }
-                this.find(data,node.right)
+        let foundNode
+        findNode(data,node)
+        return foundNode
+        function findNode(data,node){
+            if(data === node.data){
+                return foundNode = node
             }
-            this.find(data,node.left)
-        }
-        if(data > node.data){ 
-            if(node.right == undefined){
+            if(data < node.data){
                 if(node.left == undefined){
-                    return console.log("Not found")
+                    if(node.right == undefined){
+                        return console.log("Not found")
+                    }
+                    findNode(data,node.right)
                 }
-                this.find(data,node.left)
+                findNode(data,node.left)
             }
-            this.find(data,node.right)
+            if(data > node.data){ 
+                if(node.right == undefined){
+                    if(node.left == undefined){
+                        return console.log("Not found")
+                    }
+                    findNode(data,node.left)
+                }
+                findNode(data,node.right)
+            }
+            return
         }
-        return node
     }
-    levelOrder(node){
-        let traversed = []
-        let queue = []
-
-        traverse(node)
-        function traverse(node){
-            if (node == null) return
-            traversed.push(node.data)
-            queue.push(node?.left)
-            queue.push(node?.right)
-            while(queue.length){
-                
+    inOrder(node){
+        let result = []
+        traversal(node)
+        function traversal(node){
+            if(node.left){
+                traversal(node.left)
+            }
+            result.push(node.data)
+            if(node.right){
+                traversal(node.right)
             }
             return node
         }
+        return result
+    }
+    postOrder(node){
+        let result = []
+        traversal(node)
+        function traversal(node){
+            if(node.left){
+                traversal(node.left)
+            }
+            if(node.right){
+                traversal(node.right)
+            }
+            result.push(node.data)
+            return node
+        }
+        return result
+    }
+    preOrder(node){
+        let result = []
+        traversal(node)
+        function traversal(node){
+            result.push(node.data)
+            if(node.left){
+                traversal(node.left)
+            }
+            if(node.right){
+                traversal(node.right)
+            }
+            return node
+        }
+        return result
+    }
+    depth(nodeToFind,treeNode){
+        let depth = 0
+        findNode(treeNode,0)
+        return console.log("depth of node ", nodeToFind.data, "is ", depth)
+        function findNode(node,number){
+            if(nodeToFind == node){
+                return depth = number
+            }
+            number++
+            if(node.left){
+                findNode(node.left,number)
+            }
+            if(node.right){
+                findNode(node.right,number)
+            }
+            return
+        }
+    }
+    height(node){
+        let highestNumber = 0
+        traversal(node,0)
+        function traversal(node,number){
+            if(!node?.left && !node?.right){
+                if(number>highestNumber){
+                    return highestNumber = number
+                }else{
+                    return
+                }
+            }
+            number++
+            if(node.left){
+                traversal(node.left,number)
+            }
+            if(node.right){
+                traversal(node.right,number)
+            }
+        }
+        return highestNumber
+    }
+    isBalanced(node){
+        if(node == null){
+            return true
+        }
+        let lh = this.height(node.left)
+        let rh = this.height(node.right)
+
+        if(Math.abs(lh-rh) <= 1 && this.isBalanced(node.left) == true && this.isBalanced(node.right) == true){
+            return true
+        }
+        return false
+    }
+    reBalance(node){
+        let newTreeArr = mergeSort(this.preOrder(node))
+        let newTree = new Tree(newTreeArr)
+        return newTree
+    }
+    levelOrder(node){
+        let result = []
+        let queue = []
+        queue.push(node)
+        while(queue.length){
+            let subArray = []
+            const levelLength = queue.length
+            for(let i=0; i<levelLength; i++){
+                let currentNode = queue.shift()
+                subArray.push(currentNode.data)
+                if(currentNode.left){
+                    queue.push(currentNode.left)
+                }
+                if(currentNode.right){
+                    queue.push(currentNode.right)
+                }
+                
+            }
+            result.push(subArray)
+        }
+
+        return result
     }
 }
 function buildTree(array){
     if(array.length == 0){
         return null
     }
-
-
 
     let halfSort = Math.floor((array.length / 2))
     let rootNode = new Node(array[halfSort])
@@ -130,12 +241,51 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   };
 
 
-const sortedArray = mergeSort([2,4,6,8,10,12,14,16])
+/*
+const sortedArray = mergeSort([4,6,8,10,12,14,16])
 let n = sortedArray.length
 const test = new Tree(sortedArray)
-test.insert(3, test.root)
-test.insert(5, test.root)
+test.insert(2900,test.root)
+test.levelOrder(test.root)
+test.inOrder(test.root)
+test.preOrder(test.root)
+test.postOrder(test.root)
+//console.log(test.isBalanced(test.root))
+//console.log(test.height(test.find(10,test.root)))
+let four = test.find(4,test.root)
+console.log(test.isBalanced(test.root))
+test.depth(test.find(4,test.root),test.root)
+console.log("Old tree:", prettyPrint(test.root))
+const reBalance = test.reBalance(test.root)
+console.log("New tree:",reBalance)*/
 
-test.find(200, test.root)
-console.log(test.levelOrder(test.root))
-console.log(prettyPrint(test.root))
+const randomArray = Array(100).fill().map(() => Math.round(Math.random() * 40))
+const tree = new Tree(randomArray)
+
+//Make it unbalanced
+tree.insert(2900,tree.root)
+tree.insert(200,tree.root)
+tree.insert(500,tree.root)
+tree.insert(10000,tree.root)
+tree.insert(300,tree.root)
+
+//Prettyprint unbalanced tree
+prettyPrint(tree.root)
+//Log if it unbalanced
+console.log(tree.isBalanced(tree.root) ? "Tree is balanced!" : "Tree is not balanced..")
+
+
+
+//New Balanced tree
+const newBalancedTree = tree.reBalance(tree.root)
+//Prettyprint
+prettyPrint(newBalancedTree.root)
+//Log if it rebalanced
+console.log(newBalancedTree.isBalanced(newBalancedTree.root) ? "Tree has re-balanced!" : "Tree did not re-balance..")
+
+
+//Other tests
+/*console.log("Level-order:",tree.levelOrder(tree.root))
+console.log("Pre-order:",tree.preOrder(tree.root))
+console.log("Post-order:",tree.postOrder(tree.root))
+console.log("In-order:",tree.inOrder(tree.root))*/
