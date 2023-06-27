@@ -241,6 +241,31 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   };
 
 
+  const randomArray = Array(100).fill().map(() => Math.round(Math.random() * 40))
+  const tree = new Tree(randomArray)
+  
+  //Make it unbalanced
+  tree.insert(2900,tree.root)
+  tree.insert(200,tree.root)
+  tree.insert(500,tree.root)
+  tree.insert(10000,tree.root)
+  tree.insert(300,tree.root)
+  
+  //Prettyprint unbalanced tree
+  prettyPrint(tree.root)
+  //Log if it unbalanced
+  console.log(tree.isBalanced(tree.root) ? "Tree is balanced!" : "Tree is not balanced..")
+  
+  
+  
+  //New Balanced tree
+  const newBalancedTree = tree.reBalance(tree.root)
+  //Prettyprint
+  prettyPrint(newBalancedTree.root)
+  //Log if it rebalanced
+  console.log(newBalancedTree.isBalanced(newBalancedTree.root) ? "Tree has re-balanced!" : "Tree did not re-balance..")
+
+//Other tests
 /*
 const sortedArray = mergeSort([4,6,8,10,12,14,16])
 let n = sortedArray.length
@@ -250,42 +275,15 @@ test.levelOrder(test.root)
 test.inOrder(test.root)
 test.preOrder(test.root)
 test.postOrder(test.root)
-//console.log(test.isBalanced(test.root))
-//console.log(test.height(test.find(10,test.root)))
+console.log(test.isBalanced(test.root))
+console.log(test.height(test.find(10,test.root)))
 let four = test.find(4,test.root)
 console.log(test.isBalanced(test.root))
 test.depth(test.find(4,test.root),test.root)
 console.log("Old tree:", prettyPrint(test.root))
 const reBalance = test.reBalance(test.root)
-console.log("New tree:",reBalance)*/
-
-const randomArray = Array(100).fill().map(() => Math.round(Math.random() * 40))
-const tree = new Tree(randomArray)
-
-//Make it unbalanced
-tree.insert(2900,tree.root)
-tree.insert(200,tree.root)
-tree.insert(500,tree.root)
-tree.insert(10000,tree.root)
-tree.insert(300,tree.root)
-
-//Prettyprint unbalanced tree
-prettyPrint(tree.root)
-//Log if it unbalanced
-console.log(tree.isBalanced(tree.root) ? "Tree is balanced!" : "Tree is not balanced..")
-
-
-
-//New Balanced tree
-const newBalancedTree = tree.reBalance(tree.root)
-//Prettyprint
-prettyPrint(newBalancedTree.root)
-//Log if it rebalanced
-console.log(newBalancedTree.isBalanced(newBalancedTree.root) ? "Tree has re-balanced!" : "Tree did not re-balance..")
-
-
-//Other tests
-/*console.log("Level-order:",tree.levelOrder(tree.root))
+console.log("New tree:",reBalance)
+console.log("Level-order:",tree.levelOrder(tree.root))
 console.log("Pre-order:",tree.preOrder(tree.root))
 console.log("Post-order:",tree.postOrder(tree.root))
 console.log("In-order:",tree.inOrder(tree.root))*/
