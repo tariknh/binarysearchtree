@@ -30,6 +30,51 @@ class Tree{
         }
         return node
     }
+    remove(data,node){
+        let foundNode
+        findNodeChild(data,node)
+        return "Removed!"
+        function findNodeChild(data,node){
+
+            if(data === node.right?.data){
+                if(node.right.left ==null && node.right.right == null){
+                    return node.right = null
+                }
+                const oldNodeLeftChild = node.right.left
+                const replaceNode = node.right.right
+                node.right = replaceNode
+                replaceNode.left = oldNodeLeftChild
+            }
+            if(data === node.left?.data){
+                if(node.left.left == null && node.left.right == null){
+                    return node.left = null
+                }
+                const oldNodeLeftChild = node.left.left
+                const replaceNode = node.left.right
+                node.left = replaceNode
+                replaceNode.left = oldNodeLeftChild
+            }
+            if(data < node.data){
+                if(node.left == undefined){
+                    if(node.right == undefined){
+                        return console.log("Not found")
+                    }
+                    findNodeChild(data,node.right)
+                }
+                findNodeChild(data,node.left)
+            }
+            if(data > node.data){ 
+                if(node.right == undefined){
+                    if(node.left == undefined){
+                        return console.log("Not found")
+                    }
+                    findNodeChild(data,node.left)
+                }
+                findNodeChild(data,node.right)
+            }
+            return
+        }
+    }
     find(data,node){
         let foundNode
         findNode(data,node)
@@ -250,11 +295,15 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   tree.insert(500,tree.root)
   tree.insert(10000,tree.root)
   tree.insert(300,tree.root)
+
+  //remove the 300 insert
+  tree.remove(300,tree.root)
   
   //Prettyprint unbalanced tree
   prettyPrint(tree.root)
   //Log if it unbalanced
   console.log(tree.isBalanced(tree.root) ? "Tree is balanced!" : "Tree is not balanced..")
+
   
   
   
